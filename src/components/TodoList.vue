@@ -889,4 +889,99 @@ const priorityConfig = {
 .todo-enter-from { opacity: 0; transform: translateY(-12px) scale(0.95); }
 .todo-leave-to { opacity: 0; transform: translateX(30px); }
 .todo-move { transition: transform 0.3s ease; }
+
+/* ── 移动端适配 ───────────────────────────────── */
+@media (max-width: 640px) {
+  .bg-blob { display: none; }
+
+  .app-shell {
+    padding: 0;
+  }
+  .main-card {
+    max-width: 100%;
+    border-radius: 0;
+    padding: 20px 16px 24px;
+    border: none;
+    box-shadow: none;
+    min-height: 100vh;
+  }
+
+  .header { margin-bottom: 16px; }
+  .logo-icon { width: 36px; height: 36px; }
+  .logo-icon svg { width: 20px; height: 20px; }
+  .app-title { font-size: 19px; }
+  .app-subtitle { font-size: 12px; }
+
+  .new-input { padding: 12px 14px; font-size: 14px; }
+  .btn-add { width: 46px; }
+  .input-meta-row { gap: 6px; }
+  .meta-select, .meta-date {
+    flex: 1;
+    min-width: 0;
+    padding: 8px 8px;
+    font-size: 12px;
+  }
+
+  .toolbar {
+    flex-direction: column;
+    align-items: stretch;
+  }
+  .toolbar-left { width: 100%; }
+  .search-box { max-width: 100%; }
+  .toolbar-right { display: flex; gap: 8px; }
+
+  .filter-tabs {
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+  }
+  .filter-tabs::-webkit-scrollbar { display: none; }
+  .filter-tab {
+    flex-shrink: 0;
+    padding: 7px 12px;
+    white-space: nowrap;
+  }
+
+  .todo-item {
+    padding: 14px 8px;
+    gap: 8px;
+  }
+  .drag-handle {
+    opacity: 0.35;
+    width: 24px;
+  }
+  .btn-delete {
+    opacity: 0.6;
+    width: 36px;
+    height: 36px;
+    justify-content: center;
+  }
+  .checkbox-custom {
+    width: 26px;
+    height: 26px;
+    min-width: 26px;
+  }
+  .todo-text { font-size: 14px; }
+  .todo-meta { gap: 4px; }
+  .meta-badge { font-size: 10px; padding: 1px 7px; }
+
+  .empty-state { padding: 60px 16px; }
+
+  .footer-bar {
+    flex-direction: column;
+    align-items: center;
+    gap: 4px;
+    text-align: center;
+  }
+  .footer-hint { display: none; }
+}
+
+@media (max-width: 380px) {
+  .input-meta-row {
+    flex-direction: column;
+    gap: 6px;
+  }
+  .filter-tab { font-size: 11px; padding: 7px 8px; }
+  .app-title { font-size: 17px; }
+}
 </style>
