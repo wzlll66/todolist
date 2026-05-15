@@ -274,13 +274,16 @@ const priorityConfig = {
         </div>
         <div class="input-meta-row">
           <select v-model="newPriority" class="meta-select">
-            <option value="high">🔴 高优先级</option>
-            <option value="medium">🟡 中优先级</option>
-            <option value="low">🟢 低优先级</option>
+            <option value="high">高优先级</option>
+            <option value="medium">中优先级</option>
+            <option value="low">低优先级</option>
           </select>
-          <input type="date" v-model="newDueDate" class="meta-date" />
-          <select v-model="newCategory" class="meta-select">
-            <option value="">📂 分类</option>
+          <div class="date-wrap">
+            <input type="date" v-model="newDueDate" class="meta-date" />
+            <span class="date-placeholder" :class="{ hide: newDueDate }">截止日期</span>
+          </div>
+          <select v-model="newCategory" class="meta-select meta-select-full">
+            <option value="">选择分类</option>
             <option v-for="c in categories" :key="c" :value="c">{{ c }}</option>
           </select>
         </div>
@@ -636,12 +639,12 @@ const priorityConfig = {
 .btn-add:active { transform: scale(0.97); }
 
 .input-meta-row {
-  display: flex;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
   gap: 8px;
-  flex-wrap: wrap;
 }
 .meta-select, .meta-date {
-  padding: 7px 12px;
+  padding: 8px 12px;
   border: 1px solid var(--border);
   border-radius: var(--radius-sm);
   font-size: 13px;
@@ -650,8 +653,28 @@ const priorityConfig = {
   outline: none;
   cursor: pointer;
   transition: border-color 0.2s;
+  width: 100%;
 }
 .meta-select:focus, .meta-date:focus { border-color: var(--accent); }
+.meta-select-full { grid-column: 1 / -1; }
+
+/* 日期输入包装 */
+.date-wrap { position: relative; }
+.date-placeholder {
+  position: absolute;
+  left: 12px;
+  top: 50%;
+  transform: translateY(-50%);
+  font-size: 13px;
+  color: var(--text-tertiary);
+  pointer-events: none;
+  white-space: nowrap;
+}
+.date-placeholder.hide { display: none; }
+.meta-date {
+  color-scheme: var(--bg-primary);
+}
+.meta-date::-webkit-calendar-picker-indicator { cursor: pointer; }
 
 /* ── 工具栏 ───────────────────────────────────── */
 .toolbar {
@@ -914,13 +937,8 @@ const priorityConfig = {
 
   .new-input { padding: 12px 14px; font-size: 14px; }
   .btn-add { width: 46px; }
-  .input-meta-row { gap: 6px; }
-  .meta-select, .meta-date {
-    flex: 1;
-    min-width: 0;
-    padding: 8px 8px;
-    font-size: 12px;
-  }
+  .meta-select, .meta-date { padding: 8px 8px; font-size: 12px; }
+  .date-placeholder { font-size: 12px; left: 8px; }
 
   .toolbar {
     flex-direction: column;
@@ -977,10 +995,8 @@ const priorityConfig = {
 }
 
 @media (max-width: 380px) {
-  .input-meta-row {
-    flex-direction: column;
-    gap: 6px;
-  }
+  .input-meta-row { grid-template-columns: 1fr; }
+  .meta-select-full { grid-column: 1; }
   .filter-tab { font-size: 11px; padding: 7px 8px; }
   .app-title { font-size: 17px; }
 }
