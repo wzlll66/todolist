@@ -200,9 +200,9 @@ function isOverdue(d) {
 
 // ── 优先级颜色 ─────────────────────────────────
 const priorityConfig = {
-  high: { label: '高', color: '#ef4444', bg: 'rgba(239,68,68,0.12)' },
-  medium: { label: '中', color: '#f59e0b', bg: 'rgba(245,158,11,0.12)' },
-  low: { label: '低', color: '#22c55e', bg: 'rgba(34,197,94,0.12)' },
+  high: { label: '🔥 高', color: '#ef4444', bg: 'rgba(239,68,68,0.12)' },
+  medium: { label: '⚡ 中', color: '#f59e0b', bg: 'rgba(245,158,11,0.12)' },
+  low: { label: '🌱 低', color: '#22c55e', bg: 'rgba(34,197,94,0.12)' },
 }
 </script>
 
@@ -225,8 +225,8 @@ const priorityConfig = {
             </svg>
           </div>
           <div>
-            <h1 class="app-title">TodoList</h1>
-            <p class="app-subtitle">{{ stats.active }} 项待办</p>
+            <h1 class="app-title">📝 TodoList</h1>
+            <p class="app-subtitle">{{ stats.active ? `🎯 ${stats.active} 项待办` : '✨ 全部搞定！' }}</p>
           </div>
         </div>
         <div class="header-actions">
@@ -263,7 +263,7 @@ const priorityConfig = {
           <input
             v-model="newTodo"
             class="new-input"
-            placeholder="添加新任务... (Ctrl+K 聚焦)"
+            placeholder="✨ 写点什么吧..."
             autofocus
           />
           <button class="btn-add" type="submit">
@@ -274,16 +274,16 @@ const priorityConfig = {
         </div>
         <div class="input-meta-row">
           <select v-model="newPriority" class="meta-select">
-            <option value="high">高优先级</option>
-            <option value="medium">中优先级</option>
-            <option value="low">低优先级</option>
+            <option value="high">🔥 高优先级</option>
+            <option value="medium">⚡ 中优先级</option>
+            <option value="low">🌱 低优先级</option>
           </select>
           <div class="date-wrap">
             <input type="date" v-model="newDueDate" class="meta-date" />
-            <span class="date-placeholder" :class="{ hide: newDueDate }">截止日期</span>
+            <span class="date-placeholder" :class="{ hide: newDueDate }">📅 截止日期</span>
           </div>
           <select v-model="newCategory" class="meta-select meta-select-full">
-            <option value="">选择分类</option>
+            <option value="">📂 选择分类</option>
             <option v-for="c in categories" :key="c" :value="c">{{ c }}</option>
           </select>
         </div>
@@ -317,7 +317,7 @@ const priorityConfig = {
           :class="['filter-tab', { active: filter === f }]"
           @click="filter = f"
         >
-          {{ { all: '全部', active: '未完成', done: '已完成', today: '今天', overdue: '已逾期' }[f] }}
+          {{ { all: '📋 全部', active: '✨ 未完成', done: '✅ 已完成', today: '📅 今天', overdue: '⚠️ 已逾期' }[f] }}
         </button>
       </div>
 
@@ -415,20 +415,20 @@ const priorityConfig = {
         <!-- 空状态 -->
         <div class="empty-state" v-if="!filteredTodos.length">
           <div class="empty-icon">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1" width="64" height="64">
-              <path d="M9 11l3 3L22 4"/>
-              <path d="M21 12v7a2 2 0 01-2 2H5a2 2 0 01-2-2V5a2 2 0 012-2h11"/>
-            </svg>
+            <span v-if="!searchQuery && filter === 'all'">🚀</span>
+            <span v-else-if="filter === 'done'">🎉</span>
+            <span v-else-if="searchQuery">🔍</span>
+            <span v-else>📝</span>
           </div>
-          <p class="empty-title">{{ searchQuery ? '没有匹配的任务' : '还没有任务' }}</p>
-          <p class="empty-desc">{{ searchQuery ? '换个关键词试试' : '在上方输入框添加你的第一个任务吧' }}</p>
+          <p class="empty-title">{{ searchQuery ? '没有匹配的任务' : filter === 'done' ? '还没有完成的任务' : '还没有任务' }}</p>
+          <p class="empty-desc">{{ searchQuery ? '换个关键词试试吧~' : filter === 'done' ? '完成一个试试看！' : '在下方输入框添加你的第一个任务吧 ✨' }}</p>
         </div>
       </div>
 
       <!-- 底部 -->
       <footer class="footer-bar">
-        <span>{{ stats.done }} / {{ stats.total }} 已完成</span>
-        <span class="footer-hint">双击编辑 · 拖拽排序 · Ctrl+K 聚焦</span>
+        <span>✅ {{ stats.done }} / {{ stats.total }} 已完成</span>
+        <span class="footer-hint">💡 双击编辑 · 拖拽排序 · Ctrl+K 聚焦</span>
       </footer>
     </div>
   </div>
@@ -635,8 +635,8 @@ const priorityConfig = {
   transition: all 0.2s;
   flex-shrink: 0;
 }
-.btn-add:hover { background: var(--accent-hover); transform: scale(1.03); }
-.btn-add:active { transform: scale(0.97); }
+.btn-add:hover { background: var(--accent-hover); transform: scale(1.05); }
+.btn-add:active { transform: scale(0.95); }
 
 .input-meta-row {
   display: grid;
@@ -671,9 +671,6 @@ const priorityConfig = {
   white-space: nowrap;
 }
 .date-placeholder.hide { display: none; }
-.meta-date {
-  color-scheme: var(--bg-primary);
-}
 .meta-date::-webkit-calendar-picker-indicator { cursor: pointer; }
 
 /* ── 工具栏 ───────────────────────────────────── */
@@ -823,6 +820,12 @@ const priorityConfig = {
   background: var(--accent);
   border-color: var(--accent);
   color: #fff;
+  animation: checkPop 0.35s cubic-bezier(0.17, 0.89, 0.32, 1.49);
+}
+@keyframes checkPop {
+  0% { transform: scale(1); }
+  30% { transform: scale(1.3); }
+  100% { transform: scale(1); }
 }
 
 /* 内容 */
@@ -890,7 +893,12 @@ const priorityConfig = {
   text-align: center;
   padding: 48px 20px;
 }
-.empty-icon { color: var(--text-tertiary); opacity: 0.4; margin-bottom: 16px; }
+.empty-icon { margin-bottom: 16px; }
+.empty-icon span { font-size: 64px; display: inline-block; animation: float 2.5s ease-in-out infinite; }
+@keyframes float {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-10px); }
+}
 .empty-title { font-size: 16px; font-weight: 600; color: var(--text-secondary); margin-bottom: 6px; }
 .empty-desc { font-size: 13px; color: var(--text-tertiary); }
 
